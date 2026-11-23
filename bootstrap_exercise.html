@@ -3,125 +3,178 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bootstrap Exercise</title>
-  
+  <title>Bootstrap Example</title>
+  <!-- Bootstrap 5 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Added Bootstrap Icons for the circle arrow -->
+  <!-- Bootstrap Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-  
   <style>
+    /* Full screen height and zero scrollbar */
     html, body {
       height: 100%;
       margin: 0;
       overflow: hidden;
     }
-
     .left-panel {
+      width: 180px;
+      min-width: 180px;
       border-right: 1px solid #dee2e6;
-      width: 200px;
-      transition: width 0.3s ease;
-      overflow: hidden;
-      white-space: nowrap;
+      transition: width 0.3s ease, min-width 0.3s ease;
+      position: relative;
+      background-color: #ffffff;
     }
-
-    /* State when sidebar is collapsed */
-    .left-panel.collapsed {
-      width: 55px; /* Leaves just enough room for the arrow button */
+    /* When expanded, the line and paragraph move to the right */
+    .left-panel.expanded {
+      width: 340px;
+      min-width: 340px;
     }
-
-    /* Hide the menu text smoothly when collapsed */
-    .left-panel.collapsed .nav {
-      opacity: 0;
-      pointer-events: none;
+    .resizer {
+      position: absolute;
+      top: 0;
+      right: -3px;
+      width: 6px;
+      height: 100%;
+      cursor: col-resize;
+      z-index: 10;
     }
-
-    .nav {
-      transition: opacity 0.2s ease;
-    }
-
-    /* Arrow button styling and rotation animation */
-    .toggle-btn {
+    .toggle-icon-btn {
+      background: none;
+      border: none;
+      padding: 0;
       cursor: pointer;
-      font-size: 1.25rem;
-      transition: transform 0.3s ease;
-      display: inline-block;
+      color: #333;
+      line-height: 1;
     }
-
-    .left-panel.collapsed .toggle-btn {
-      transform: rotate(180deg); /* Flips arrow direction when collapsed */
+    .toggle-icon-btn:hover {
+      color: #0d6efd;
     }
   </style>
 </head>
 <body class="d-flex flex-column vh-100 overflow-hidden">
-
+ 
+  <!-- 1. Top Pane: Dark bar with right-aligned Top Menu -->
   <header class="bg-dark text-white py-2 px-3">
     <div class="d-flex justify-content-end align-items-center">
       <span>Top Menu...</span>
     </div>
   </header>
-
-  <div class="container-fluid flex-grow-1 p-0 d-flex overflow-hidden">
-    <div class="row g-0 flex-grow-1 w-100">
-
-      <!-- Added id="sidebar" -->
-      <nav id="sidebar" class="col-auto left-panel p-3 d-flex flex-column">
-        
-        <!-- Arrow Button aligned to the right -->
+ 
+  <!-- Container for the 2 lower panes (Left Menu + Main Panel) -->
+  <div class="container-fluid flex-grow-1 p-0 d-flex overflow-hidden position-relative">
+    <div class="d-flex flex-grow-1 w-100 h-100">
+ 
+      <!-- 2. Left Navigator Panel -->
+      <nav class="left-panel p-3 d-flex flex-column" id="sidebar">
+        <!-- Toggle button on the right edge: moves the line and paragraph -->
         <div class="d-flex justify-content-end mb-2">
-          <i id="toggleArrow" class="bi bi-arrow-left-circle toggle-btn text-dark" title="Toggle Menu"></i>
+          <button class="toggle-icon-btn" id="toggleBtn" title="Toggle panel width">
+            <i class="bi bi-arrow-right-circle fs-5" id="toggleIcon"></i>
+          </button>
         </div>
-
-        <ul class="nav flex-column">
-          <li class="nav-item">
-            <span class="nav-link text-dark px-0 py-1">Menu 1</span>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link px-0 py-1 text-primary text-decoration-none"
-               data-bs-toggle="collapse"
-               href="#submenu2"
-               role="button"
-               aria-expanded="false"
-               aria-controls="submenu2">
-              Menu 2
-            </a>
-           
-            <div class="collapse" id="submenu2">
-              <ul class="nav flex-column ps-3">
-                <li class="nav-item">
-                  <a class="nav-link px-0 py-1 text-primary text-decoration-none" href="#">Menu 2.1</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link px-0 py-1 text-primary text-decoration-none" href="#">Menu 2.2</a>
-                </li>
-              </ul>
-            </div>
-          </li>
-          <li class="nav-item">
-            <span class="nav-link text-dark px-0 py-1">Menu 3</span>
-          </li>
-        </ul>
+ 
+        <!-- Menu items: Stay fixed on the left -->
+        <div class="menu-content text-start">
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <span class="nav-link text-dark px-0 py-1">Menu 1</span>
+            </li>
+            <li class="nav-item">
+              <!-- Collapsible Menu 2 toggle (default hidden) -->
+              <a class="nav-link px-0 py-1 text-primary text-decoration-none"
+                 data-bs-toggle="collapse"
+                 href="#submenu2"
+                 role="button"
+                 aria-expanded="false"
+                 aria-controls="submenu2">
+                Menu 2
+              </a>
+              <!-- Submenu: Menu 2.1 and Menu 2.2 -->
+              <div class="collapse" id="submenu2">
+                <ul class="nav flex-column ps-3">
+                  <li class="nav-item">
+                    <a class="nav-link px-0 py-1 text-primary text-decoration-none" href="#">Menu 2.1</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link px-0 py-1 text-primary text-decoration-none" href="#">Menu 2.2</a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li class="nav-item">
+              <span class="nav-link text-dark px-0 py-1">Menu 3</span>
+            </li>
+          </ul>
+        </div>
+ 
+        <!-- Draggable resizer handle on the border -->
+        <div class="resizer" id="dragResizer" title="Drag to resize border"></div>
       </nav>
-
-      <main class="col p-3 overflow-hidden">
+ 
+      <!-- 3. Main Panel: Moves beside the line -->
+      <main class="flex-grow-1 p-3 overflow-hidden">
         <p>
           It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
         </p>
       </main>
-
+ 
     </div>
   </div>
-
+ 
   <!-- Bootstrap 5 Bundle JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  
-  <!-- Script to toggle sidebar movement -->
   <script>
+    const toggleBtn = document.getElementById('toggleBtn');
     const sidebar = document.getElementById('sidebar');
-    const toggleArrow = document.getElementById('toggleArrow');
-
-    toggleArrow.addEventListener('click', () => {
-      sidebar.classList.toggle('collapsed');
+    const toggleIcon = document.getElementById('toggleIcon');
+ 
+    // Toggle button: expands/contracts the line & paragraph, keeping Menu 1 2 3 in place
+    toggleBtn.addEventListener('click', function () {
+      sidebar.style.removeProperty('width');
+      sidebar.style.removeProperty('min-width');
+      sidebar.classList.toggle('expanded');
+      if (sidebar.classList.contains('expanded')) {
+        toggleIcon.classList.replace('bi-arrow-right-circle', 'bi-arrow-left-circle');
+      } else {
+        toggleIcon.classList.replace('bi-arrow-left-circle', 'bi-arrow-right-circle');
+      }
+    });
+ 
+    // Draggable resizer on the border line
+    const resizer = document.getElementById('dragResizer');
+    let isResizing = false;
+ 
+    resizer.addEventListener('mousedown', function (e) {
+      isResizing = true;
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+      sidebar.style.transition = 'none'; // Instant response while dragging
+    });
+ 
+    document.addEventListener('mousemove', function (e) {
+      if (!isResizing) return;
+      const newWidth = e.clientX;
+      if (newWidth >= 140 && newWidth <= 600) {
+        sidebar.style.width = newWidth + 'px';
+        sidebar.style.minWidth = newWidth + 'px';
+        if (newWidth > 240) {
+          sidebar.classList.add('expanded');
+          toggleIcon.classList.replace('bi-arrow-right-circle', 'bi-arrow-left-circle');
+        } else {
+          sidebar.classList.remove('expanded');
+          toggleIcon.classList.replace('bi-arrow-left-circle', 'bi-arrow-right-circle');
+        }
+      }
+    });
+ 
+    document.addEventListener('mouseup', function () {
+      if (isResizing) {
+        isResizing = false;
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+        sidebar.style.transition = 'width 0.3s ease, min-width 0.3s ease';
+      }
     });
   </script>
 </body>
 </html>
+ 
